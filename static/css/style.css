@@ -1,0 +1,8 @@
+#main-image {
+    height: 500px;
+    background: url('../images/restaurant-by-the-sea.jpg') no-repeat center center;
+}
+
+#about {
+   padding: 50px 25px;
+}
