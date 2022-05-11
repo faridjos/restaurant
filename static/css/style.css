@@ -1,3 +1,13 @@
 #about {
    padding: 50px 25px;
 }
+
+button[type="submit"] {
+    display: block;
+    margin: 15px auto 20px;
+    background-color: #e84610;
+    color: #fafafa;
+    position: relative;
+    top: 400px;
+    text-transform: uppercase;
+}
