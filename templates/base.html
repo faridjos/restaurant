@@ -71,27 +71,12 @@
         </div>
     </nav>
 
-    <main>
-        {% block content %}
+    {% block content %}
+        
         <!-- Content Goes here -->
-        {% endblock content %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="mt-auto px-3 py-3 bg-secondary row">
-        <div class="col-sm-4 text-white">
-            <h5>ADDRESS:</h5>
-            <p>5 Sea Street, Vancouver Canada</p>
-        </div>
-        <div class="col-sm-4 text-white">
-            <h5>TELEPHONE:</h5>
-            <p>0123456789</p>
-        </div>
-        <div class="col-sm-4 text-white">
-            <h5>EMAIL:</h5>
-            <p>searestaurant@mail.com</p>
-        </div>
-    </footer>
+        
+    {% endblock %}
+    
 </body>
 
 </html>

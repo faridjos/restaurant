@@ -2,7 +2,7 @@
    padding: 50px 25px;
 }
 
-button[type="submit"] {
+button[type='submit']{
     display: block;
     margin: 15px auto 20px;
     background-color: #e84610;
@@ -10,4 +10,14 @@ button[type="submit"] {
     position: relative;
     top: 400px;
     text-transform: uppercase;
+}
+
+#button-contact {
+    position: static;
+    margin: 15px 0 20px;
+}
+
+.contact {
+    padding: 20px;
+    border-collapse: unset;
 }
