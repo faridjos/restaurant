@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 
 
 class Customer(models.Model):
-    username = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="name", blank=True, null=True)
     fname = models.CharField(max_length=50)
     lname = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, blank=True, null=True)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="name", blank=True, null=True)
 
     class Meta:
         ordering = ['lname']

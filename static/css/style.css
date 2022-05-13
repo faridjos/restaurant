@@ -2,22 +2,27 @@
    padding: 50px 25px;
 }
 
-button[type='submit']{
+section  button[type='button'], button[type='submit'] {
     display: block;
-    margin: 15px auto 20px;
+    margin: 15px 0 20px;
     background-color: #e84610;
     color: #fafafa;
-    position: relative;
-    top: 400px;
     text-transform: uppercase;
 }
 
-#button-contact {
-    position: static;
-    margin: 15px 0 20px;
+#button-home {
+    margin: 15px auto 20px;
+    position: relative;
+    top: 400px;  
 }
 
 .contact {
     padding: 20px;
     border-collapse: unset;
+}
+
+#form-center {
+    width: 200px;
+    margin: 0 auto 0;
+    padding: 0 0 20px;
 }
