@@ -25,13 +25,13 @@ class Table(models.Model):
         ordering = ['number_of_seats']
 
 
-class Booking(models.Model):
-    customer = models.ForeignKey(
-        Customer, on_delete=models.CASCADE, related_name="bookings")
-    tables = models.ManyToManyField(Table, related_name="bookings")
-    party_size = models.IntegerField()
-    booking_time = models.DateTimeField()
-    time_of_booking = models.DateTimeField(auto_now_add=True)
+#class Booking(models.Model):
+#    customer = models.ForeignKey(
+#        Customer, on_delete=models.CASCADE, related_name="bookings")
+#    tables = models.ManyToManyField(Table, related_name="bookings")
+#    party_size = models.IntegerField()
+#    booking_time = models.DateTimeField()
+#    time_of_booking = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['-booking_time']
+#    class Meta:
+#        ordering = ['-booking_time']

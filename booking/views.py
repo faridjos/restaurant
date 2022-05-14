@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from .forms import BookingForm, CustomerForm
+from .forms import CustomerForm
+# BookingForm, 
 
 # Create your views here.
 
@@ -35,7 +36,24 @@ class Form(View):
             request,
             'form.html',
             {
-                'booking_form': BookingForm(),
+                # 'booking_form': BookingForm(),
                 'customer_form': CustomerForm(),
             }
+        )
+    
+    def post(self, request):
+        # booking_form = BookingForm(request.POST)
+        customer_form = CustomerForm(request.POST)
+    # booking_form.is_valid() and    
+        if customer_form.is_valid():
+            # booking_form.save()
+            customer_form.save()
+            return redirect('booking')
+
+
+class Booking(View):
+    def get(self, request):
+        return render(
+            request,
+            'booking.html',
         )
