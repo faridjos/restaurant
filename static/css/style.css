@@ -26,3 +26,8 @@ section  button[type='button'], button[type='submit'] {
     margin: 0 auto 0;
     padding: 0 0 20px;
 }
+
+#card-center {
+    width: 320px;
+    margin: 15px auto 30px;
+}

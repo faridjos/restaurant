@@ -4,7 +4,31 @@
 
 <section class="row no-gutters">
     <div class="col-sm-8">
-        Booking
+        <div class="card text-dark bg-info" id="card-center">
+            <div class="card-body">
+              <h5 class="card-title">Your booking</h5>
+              <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ booking.customer.first_name }} {{ booking.customer.last_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Party size</td>
+                        <td>{{ booking.party_size }}</td>
+                    </tr>
+                    <tr>
+                        <td>Booking time</td>
+                        <td>{{ booking_time }}</td>
+                    </tr>
+                    <tr>
+                        <td>Time of booking</td>
+                        <td>{{ time_of_booking }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+          </div>
     </div>
     <div class="col-sm-4">
     </div>

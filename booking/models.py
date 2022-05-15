@@ -5,17 +5,17 @@ from django.contrib.auth.models import User
 
 
 class Customer(models.Model):
-    fname = models.CharField(max_length=50)
-    lname = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     username = models.CharField(max_length=50, blank=True, null=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="name", blank=True, null=True)
 
     class Meta:
-        ordering = ['lname']
+        ordering = ['last_name']
 
     def __str__(self):
-        return self.lname
+        return self.last_name
 
 
 class Table(models.Model):
@@ -25,13 +25,13 @@ class Table(models.Model):
         ordering = ['number_of_seats']
 
 
-#class Booking(models.Model):
-#    customer = models.ForeignKey(
-#        Customer, on_delete=models.CASCADE, related_name="bookings")
-#    tables = models.ManyToManyField(Table, related_name="bookings")
-#    party_size = models.IntegerField()
-#    booking_time = models.DateTimeField()
-#    time_of_booking = models.DateTimeField(auto_now_add=True)
+class Booking(models.Model):
+    customer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name="bookings")
+    tables = models.ManyToManyField(Table, related_name="bookings")
+    party_size = models.IntegerField()
+    booking_time = models.DateTimeField()
+    time_of_booking = models.DateTimeField(auto_now_add=True)
 
-#    class Meta:
-#        ordering = ['-booking_time']
+    class Meta:
+        ordering = ['-booking_time']
