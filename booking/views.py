@@ -4,6 +4,7 @@ from .forms import CustomerForm, BookingForm
 from .models import Customer, Booking, Table
 from datetime import datetime
 from .routines import validate_form, round_datetime, found_table, found_any_table
+from django.utils import timezone
 
 
 # Create your views here.
@@ -54,6 +55,9 @@ class Form(View):
             print(booking.party_size)
             if validate_form(self, booking.party_size, booking.booking_time):
                 print("hej2")
+                if request.user.is_authenticated:
+                    customer.user = request.user
+                    customer.username = request.user.username
                 booking.customer = customer
                 round_booking_time = round_datetime(self, booking.booking_time)
                 booking.booking_time = round_booking_time
@@ -92,7 +96,7 @@ class Form(View):
             
 
 
-class Show_booking(View):
+class ShowBooking(View):
     def get(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
         booking_time = booking.booking_time.strftime("%d/%m/%Y %H:%M %Z")
@@ -106,3 +110,18 @@ class Show_booking(View):
                 'time_of_booking': time_of_booking,
             }
         )
+
+
+class BookingButton(View):
+    def get(self, request):
+        if Customer.objects.filter(username=request.user.username).exists():
+            customer = get_object_or_404(Customer, username=request.user.username)
+            booking = customer.bookings.all()[0]
+            dt = datetime.now()
+            dt_aware = timezone.make_aware(dt, timezone.get_current_timezone())
+            if booking.booking_time >= dt_aware:
+                return redirect('booking', booking.id)
+            else: 
+                return redirect('home')
+        else: 
+            return redirect('home')

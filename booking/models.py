@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    username = models.CharField(max_length=50, blank=True, null=True)
+    username = models.CharField(max_length=50, blank=True, null=True, unique=True)
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="name", blank=True, null=True)
 
