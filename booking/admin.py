@@ -14,6 +14,6 @@ class TableAdmin(admin.ModelAdmin):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ('customer', 'party_size', 'booking_time', 'time_of_booking')
+    list_display = ('customer', 'party_size', 'table', 'booking_time', 'time_of_booking')
     list_filter = ('booking_time',)
     search_fields = ['customer']
