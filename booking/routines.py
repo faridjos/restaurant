@@ -30,29 +30,23 @@ def found_table(self, number_of_seats, party_size, booking_time):
     for table in tables:
         found_empty_table = True
         if table.bookings.exists():
-            print("hej4")
             for booking in table.bookings.all():
                 if (booking.booking_time - timedelta(hours=2)) <= booking_time < (booking.booking_time + timedelta(hours=2)):
                     found_empty_table = False
-                    print("hej5")
                     break
         if found_empty_table:
-            print("hej6")
             return [True, table.id]
 
     if not found_empty_table:
         for table in tables:
             found_seats = True
             if table.bookings.exists():
-                print("hej44")
                 for booking in table.bookings.all():
                     if (booking.booking_time - timedelta(hours=2)) <= booking_time < (booking.booking_time + timedelta(hours=2)):
                         if party_size > number_of_seats - booking.party_size:
                             found_seats = False
-                            print("hej55")
                             break
             if found_seats:
-                print("hej66")
                 return [True, table.id]
 
     return [False, 0]

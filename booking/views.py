@@ -48,25 +48,32 @@ class Form(View):
     def post(self, request):
         customer_form = CustomerForm(request.POST)
         booking_form = BookingForm(request.POST)
-        if customer_form.is_valid() and booking_form.is_valid():
-            print("hej1")
-            customer = customer_form.save(commit=False)
+        if booking_form.is_valid():
+            if request.user.is_authenticated:
+                customer_form.instance.user = request.user
+                customer_form.instance.username = request.user.username
+                username = customer_form.instance.username
+            else:
+                username = request.POST.get('username')
+            if username is not None:
+                if not username.isspace():
+                    if Customer.objects.filter(username=username).exists():
+                        customer = get_object_or_404(Customer, username=username)
+                    else:
+                        customer = customer_form.save()
+                else:
+                    customer = customer_form.save()  
+            else:
+                customer = customer_form.save()
             booking = booking_form.save(commit=False)
-            print(booking.party_size)
-            if validate_form(self, booking.party_size, booking.booking_time):
-                print("hej2")
-                if request.user.is_authenticated:
-                    customer.user = request.user
-                    customer.username = request.user.username
+            if validate_form(self, booking.party_size, booking.booking_time):   
                 booking.customer = customer
                 round_booking_time = round_datetime(self, booking.booking_time)
                 booking.booking_time = round_booking_time
                 [found, table_id] = found_any_table(self, booking.party_size, booking.booking_time)
                 if found:
-                    print("hej3")
                     table = get_object_or_404(Table, id=table_id)
                     booking.table = table
-                    customer = customer_form.save()
                     booking = booking_form.save()
                     return redirect('booking', booking.id)
                 else:
@@ -93,8 +100,6 @@ class Form(View):
                             'customer_form': CustomerForm(),
                         }
             )
-            
-
 
 class ShowBooking(View):
     def get(self, request, booking_id):
