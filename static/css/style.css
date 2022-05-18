@@ -36,3 +36,8 @@ section  button[type='button'], button[type='submit'] {
     color: #e84610;
     text-decoration: none;
 }
+
+div#map {
+    min-height: 360px;
+    margin: 30px 15px 15px 15px;
+}
