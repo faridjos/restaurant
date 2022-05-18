@@ -116,12 +116,22 @@ class BookingButton(View):
     def get(self, request):
         if Customer.objects.filter(username=request.user.username).exists():
             customer = get_object_or_404(Customer, username=request.user.username)
-            booking = customer.bookings.all()[0]
-            dt = datetime.now()
-            dt_aware = timezone.make_aware(dt, timezone.get_current_timezone())
-            if booking.booking_time >= dt_aware:
-                return redirect('booking', booking.id)
-            else: 
+            if customer.bookings.exists():
+                booking = customer.bookings.all()[0]
+                dt = datetime.now()
+                dt_aware = timezone.make_aware(dt, timezone.get_current_timezone())
+                if booking.booking_time >= dt_aware:
+                    return redirect('booking', booking.id)
+                else: 
+                    return redirect('home')
+            else:
                 return redirect('home')
         else: 
             return redirect('home')
+
+
+class CancelBooking(View):
+    def get(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id)
+        booking.delete()
+        return redirect('home')
