@@ -5,6 +5,7 @@ from .models import Customer, Booking, Table
 from datetime import datetime
 from .routines import validate_form, round_datetime, found_table, found_any_table
 from django.utils import timezone
+from django.contrib import messages
 
 
 # Create your views here.
@@ -75,24 +76,33 @@ class Form(View):
                     table = get_object_or_404(Table, id=table_id)
                     booking.table = table
                     booking = booking_form.save()
+                    messages.add_message(
+                        request, messages.SUCCESS, 'Your booking was sucessful!')
                     return redirect('booking', booking.id)
                 else:
+                    messages.add_message(
+                        request, messages.ERROR, 'No available table')
                     return render(
                         request,
                         'form.html', {
                             'booking_form': BookingForm(),
-                            'customer_form': CustomerForm(),
+                            'customer_form': CustomerForm(instance=customer),
                         }
                     )
             else:
+                messages.add_message(
+                        request, messages.ERROR,
+                        'Error in party size (0-4) or booking time (see opening hours)')
                 return render(
                         request,
                         'form.html', {
                             'booking_form': BookingForm(),
-                            'customer_form': CustomerForm(),
+                            'customer_form': CustomerForm(instance=customer),
                         }
                 )
         else:
+            messages.add_message(
+                        request, messages.ERROR, 'Error in booking form')
             return render(
                         request,
                         'form.html', {
@@ -100,6 +110,7 @@ class Form(View):
                             'customer_form': CustomerForm(),
                         }
             )
+
 
 class ShowBooking(View):
     def get(self, request, booking_id):
@@ -127,11 +138,17 @@ class BookingButton(View):
                 for booking in bookings:         
                     if booking.booking_time >= dt:
                         return redirect('booking', booking.id)
-                    else: 
+                    else:
+                        messages.add_message(
+                            request, messages.ERROR, 'You have no booking')
                         return redirect('home')
             else:
+                messages.add_message(
+                    request, messages.ERROR, 'You have no booking')
                 return redirect('home')
-        else: 
+        else:
+            messages.add_message(
+                    request, messages.ERROR, 'You have no booking')
             return redirect('home')
 
 
@@ -139,6 +156,8 @@ class CancelBooking(View):
     def get(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
         booking.delete()
+        messages.add_message(
+            request, messages.SUCCESS, 'You successfully cancelled your booking!')
         return redirect('home')
 
 
@@ -169,8 +188,12 @@ class EditForm(View):
                     table = get_object_or_404(Table, id=table_id)
                     booking.table = table
                     booking = booking_form.save()
+                    messages.add_message(
+                        request, messages.SUCCESS, 'Your booking was sucessful!')
                     return redirect('booking', booking.id)
                 else:
+                    messages.add_message(
+                        request, messages.ERROR, 'No available table')
                     return render(
                         request,
                         'form.html', {
@@ -179,6 +202,9 @@ class EditForm(View):
                         }
                     )
             else:
+                messages.add_message(
+                        request, messages.ERROR,
+                        'Error in party size (0-4) or booking time (see opening hours)')
                 return render(
                         request,
                         'form.html', {
@@ -187,6 +213,8 @@ class EditForm(View):
                         }
                 )
         else:
+            messages.add_message(
+                        request, messages.ERROR, 'Error in booking form')
             return render(
                         request,
                         'form.html', {

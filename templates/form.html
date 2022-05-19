@@ -82,6 +82,20 @@
         </div>
     </nav>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" id="msg" role="alert">
+                    {{ message | safe }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
     <section class="row no-gutters main-image">
         <div class="col-sm-6 col-lg-4">
             <form method="post" id="form-center">
@@ -135,7 +149,11 @@
             <p>searestaurant@mail.com</p>
         </div>
     </footer>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOaIDB5ww5nfTkth_GBztb49XX_Xq8wTc&callback=initMap"></script>
-    <script src="{% static 'js/maps.js' %}"></script>
+    <script>
+        setTimeout(function () {
+            let messages = document.getElementById("msg");
+            let alert = new bootstrap.Alert(messages);
+            alert.close();
+        }, 3000);
+    </script>
 </body>
