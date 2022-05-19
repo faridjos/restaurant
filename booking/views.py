@@ -122,12 +122,13 @@ class BookingButton(View):
         if Customer.objects.filter(username=request.user.username).exists():
             customer = get_object_or_404(Customer, username=request.user.username)
             if customer.bookings.exists():
-                booking = customer.bookings.all()[0]
+                bookings = customer.bookings.all()
                 dt = datetime.now().astimezone()
-                if booking.booking_time >= dt:
-                    return redirect('booking', booking.id)
-                else: 
-                    return redirect('home')
+                for booking in bookings:         
+                    if booking.booking_time >= dt:
+                        return redirect('booking', booking.id)
+                    else: 
+                        return redirect('home')
             else:
                 return redirect('home')
         else: 
@@ -139,3 +140,57 @@ class CancelBooking(View):
         booking = get_object_or_404(Booking, id=booking_id)
         booking.delete()
         return redirect('home')
+
+
+class EditForm(View):
+    def get(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id)
+        customer = booking.customer
+        return render(
+            request,
+            'edit_form.html',
+            {
+                'booking_form': BookingForm(instance=booking),
+                'customer_form': CustomerForm(instance=customer),
+            }
+        )
+    
+    def post(self, request, booking_id):
+        booking = get_object_or_404(Booking, id=booking_id)
+        customer = booking.customer
+        booking_form = BookingForm(request.POST, instance=booking)
+        if booking_form.is_valid():
+            booking = booking_form.save(commit=False)
+            if validate_form(self, booking.party_size, booking.booking_time):   
+                round_booking_time = round_datetime(self, booking.booking_time)
+                booking.booking_time = round_booking_time
+                [found, table_id] = found_any_table(self, booking.party_size, booking.booking_time)
+                if found:
+                    table = get_object_or_404(Table, id=table_id)
+                    booking.table = table
+                    booking = booking_form.save()
+                    return redirect('booking', booking.id)
+                else:
+                    return render(
+                        request,
+                        'form.html', {
+                            'booking_form': BookingForm(instance=booking),
+                            'customer_form': CustomerForm(instance=customer),
+                        }
+                    )
+            else:
+                return render(
+                        request,
+                        'form.html', {
+                            'booking_form': BookingForm(instance=booking),
+                            'customer_form': CustomerForm(instance=customer),
+                        }
+                )
+        else:
+            return render(
+                        request,
+                        'form.html', {
+                            'booking_form': BookingForm(instance=booking),
+                            'customer_form': CustomerForm(instance=customer),
+                        }
+            )
