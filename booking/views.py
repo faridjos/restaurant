@@ -106,7 +106,8 @@ class Form(View):
             else:
                 messages.add_message(
                     request, messages.ERROR,
-                    'Error in party size (0-4) or booking time (see opening hours)')
+                    'Error in party size (0-4) or booking time'
+                    ' (see opening hours)')
                 return render(
                         request,
                         'form.html', {
@@ -231,7 +232,8 @@ class EditForm(View):
             else:
                 messages.add_message(
                     request, messages.ERROR,
-                    'Error in party size (0-4) or booking time (see opening hours)')
+                    'Error in party size (0-4) or booking time'
+                    ' (see opening hours)')
                 return render(
                         request,
                         'form.html', {
