@@ -1,6 +1,8 @@
 from .models import Customer, Booking
 from django import forms
 
+# Class-based forms deriving from class-based models
+
 
 class CustomerForm(forms.ModelForm):
     class Meta:
@@ -9,13 +11,14 @@ class CustomerForm(forms.ModelForm):
 
 
 class BookingForm(forms.ModelForm):
-    booking_time = forms.DateTimeField (
-        widget=forms.DateTimeInput (
+    booking_time = forms.DateTimeField(
+        widget=forms.DateTimeInput(
             attrs={
                 'type': 'datetime-local',
             }
         )
     )
+
     class Meta:
         model = Booking
         fields = ('party_size', 'booking_time')

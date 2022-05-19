@@ -1,7 +1,4 @@
-#about {
-   padding: 50px 25px;
-}
-
+/* Button appearance before they are clicked */
 section  button[type='button'], button[type='submit'] {
     display: block;
     margin: 15px 0 20px;
@@ -16,16 +13,24 @@ section  button[type='button'], button[type='submit'] {
     top: 400px;  
 }
 
-.contact {
-    padding: 0 0 0 20px;
+/* Home page */
+#about {
+   padding: 50px 25px;
 }
 
+/* Map on contact page */
+div#map {
+    min-height: 360px;
+}
+
+/* Center booking form */
 #form-center {
     width: 200px;
     margin: 0 auto 0;
     padding: 20px 0 20px;
 }
 
+/* Center booking card */
 #card-center {
     width: 300px;
     margin: 15px auto 30px;
@@ -36,6 +41,6 @@ section  button[type='button'], button[type='submit'] {
     text-decoration: none;
 }
 
-div#map {
-    min-height: 360px;
+.contact {
+    padding: 0 0 0 20px;
 }

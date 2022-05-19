@@ -1,4 +1,6 @@
 {% load static %}
+
+<!-- Rendering the forms with Django-crispy-forms -->
 {% load crispy_forms_tags %}
 
 <!DOCTYPE html>
@@ -18,20 +20,24 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- To find the background image the static file has to load which was impossible in the CSS file -->
+    <!-- The pseudoelement is to make only the background transparent -->
     <style>
         .main-image {
             height: 600px;
             position: relative;
         }
+
         .main-image::before {
-            content:'';
+            content: '';
             background: url("{% static 'images/restaurant-by-the-sea.jpg' %}") no-repeat center center;
-            position:absolute;
+            position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
-            opacity: 0.4;
+            opacity: 0.3;
             z-index: -1;
         }
     </style>
@@ -41,16 +47,17 @@
 
 <body>
 
-    <!-- Navigation -->
+    <!-- Navigation from Bootstrap 5 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand"><img src="{% static 'images/logo-restaurant.png' %}" alt="logo"></span></a>
+            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand"><img
+                        src="{% static 'images/logo-restaurant.png' %}" alt="logo"></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">                    
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -97,6 +104,8 @@
     </div>
 
     <section class="row no-gutters main-image">
+
+        <!-- Render the form -->
         <div class="col-sm-6 col-lg-4">
             <form method="post" id="form-center">
                 {{ booking_form | crispy }}
@@ -105,6 +114,8 @@
                 <button type="submit" class="btn btn-secondary">Submit</button>
             </form>
         </div>
+
+        <!-- Table showing opening hours -->
         <div class="col-sm-6 col-lg-4 mt-sm-4 contact">
             <table class="table table-borderless">
                 <caption-top>
@@ -149,6 +160,8 @@
             <p>searestaurant@mail.com</p>
         </div>
     </footer>
+
+    <!-- enable erasing message after 3s. Copied from Code Institute Codestar Django3blog -->
     <script>
         setTimeout(function () {
             let messages = document.getElementById("msg");

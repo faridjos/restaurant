@@ -3,8 +3,7 @@ from django.views import View
 from .forms import CustomerForm, BookingForm
 from .models import Customer, Booking, Table
 from datetime import datetime
-from .routines import validate_form, round_datetime, found_table, found_any_table
-from django.utils import timezone
+from .routines import validate_form, round_datetime, found_any_table
 from django.contrib import messages
 
 
@@ -12,6 +11,7 @@ from django.contrib import messages
 
 
 class MainImage(View):
+    """Render the home page"""
     def get(self, request):
         form = "form"
         return render(
@@ -24,6 +24,7 @@ class MainImage(View):
 
 
 class Contact(View):
+    """Render the contact page"""
     def get(self, request):
         form = "form"
         return render(
@@ -36,6 +37,8 @@ class Contact(View):
 
 
 class Form(View):
+    """Render and submit form. Make a booking and display message
+    if it was successful or not"""
     def get(self, request):
         return render(
             request,
@@ -45,7 +48,7 @@ class Form(View):
                 'customer_form': CustomerForm(),
             }
         )
-    
+
     def post(self, request):
         customer_form = CustomerForm(request.POST)
         booking_form = BookingForm(request.POST)
@@ -58,26 +61,37 @@ class Form(View):
                 username = request.POST.get('username')
             if username is not None:
                 if not username.isspace():
+                    # Do not create customer object if it already exists.
+                    # A customer is identified by his username.
                     if Customer.objects.filter(username=username).exists():
-                        customer = get_object_or_404(Customer, username=username)
+                        customer = get_object_or_404(
+                            Customer, username=username)
                     else:
                         customer = customer_form.save()
+                # If the customer does not write his username (it is optional)
+                # there is no way of knowing if the customer has a record or
+                # not.
                 else:
-                    customer = customer_form.save()  
+                    customer = customer_form.save()
             else:
                 customer = customer_form.save()
             booking = booking_form.save(commit=False)
-            if validate_form(self, booking.party_size, booking.booking_time):   
+            # Validate form
+            if validate_form(self, booking.party_size, booking.booking_time):
                 booking.customer = customer
                 round_booking_time = round_datetime(self, booking.booking_time)
                 booking.booking_time = round_booking_time
-                [found, table_id] = found_any_table(self, booking.party_size, booking.booking_time)
+                [found, table_id] = found_any_table(
+                    self, booking.party_size, booking.booking_time)
+                # Store booking if table is found
                 if found:
                     table = get_object_or_404(Table, id=table_id)
                     booking.table = table
                     booking = booking_form.save()
                     messages.add_message(
-                        request, messages.SUCCESS, 'Your booking was sucessful!')
+                        request, messages.SUCCESS,
+                        'Your booking was sucessful!')
+                    # Show booking
                     return redirect('booking', booking.id)
                 else:
                     messages.add_message(
@@ -91,8 +105,8 @@ class Form(View):
                     )
             else:
                 messages.add_message(
-                        request, messages.ERROR,
-                        'Error in party size (0-4) or booking time (see opening hours)')
+                    request, messages.ERROR,
+                    'Error in party size (0-4) or booking time (see opening hours)')
                 return render(
                         request,
                         'form.html', {
@@ -113,10 +127,14 @@ class Form(View):
 
 
 class ShowBooking(View):
+    """Show booking if it was successful"""
     def get(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
-        booking_time = booking.booking_time.astimezone().strftime("%d/%m/%Y %H:%M")
-        time_of_booking = booking.time_of_booking.astimezone().strftime("%d/%m/%Y %H:%M")
+        # Format time for printing on booking card
+        booking_time = booking.booking_time.astimezone().strftime(
+            "%d/%m/%Y %H:%M")
+        time_of_booking = booking.time_of_booking.astimezone().strftime(
+            "%d/%m/%Y %H:%M")
         return render(
             request,
             'booking.html',
@@ -129,14 +147,17 @@ class ShowBooking(View):
 
 
 class BookingButton(View):
+    """Show booking if any"""
     def get(self, request):
         if Customer.objects.filter(username=request.user.username).exists():
-            customer = get_object_or_404(Customer, username=request.user.username)
+            customer = get_object_or_404(
+                Customer, username=request.user.username)
             if customer.bookings.exists():
-                bookings = customer.bookings.all()
+                bookings = customer.bookings.all().order_by('booking_time')
                 dt = datetime.now().astimezone()
-                for booking in bookings:         
+                for booking in bookings:
                     if booking.booking_time >= dt:
+                        # Show first booking if several
                         return redirect('booking', booking.id)
                     else:
                         messages.add_message(
@@ -157,39 +178,45 @@ class CancelBooking(View):
         booking = get_object_or_404(Booking, id=booking_id)
         booking.delete()
         messages.add_message(
-            request, messages.SUCCESS, 'You successfully cancelled your booking!')
+            request, messages.SUCCESS,
+            'You successfully cancelled your booking!')
         return redirect('home')
 
 
 class EditForm(View):
     def get(self, request, booking_id):
+        # Render prepopulated booking form
         booking = get_object_or_404(Booking, id=booking_id)
         customer = booking.customer
         return render(
             request,
-            'edit_form.html',
+            'form.html',
             {
                 'booking_form': BookingForm(instance=booking),
                 'customer_form': CustomerForm(instance=customer),
             }
         )
-    
+
     def post(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
         customer = booking.customer
         booking_form = BookingForm(request.POST, instance=booking)
         if booking_form.is_valid():
             booking = booking_form.save(commit=False)
-            if validate_form(self, booking.party_size, booking.booking_time):   
+            # Validate form
+            if validate_form(self, booking.party_size, booking.booking_time):
                 round_booking_time = round_datetime(self, booking.booking_time)
                 booking.booking_time = round_booking_time
-                [found, table_id] = found_any_table(self, booking.party_size, booking.booking_time)
+                [found, table_id] = found_any_table(
+                    self, booking.party_size, booking.booking_time)
+                # Store booking if table is found
                 if found:
                     table = get_object_or_404(Table, id=table_id)
                     booking.table = table
                     booking = booking_form.save()
                     messages.add_message(
-                        request, messages.SUCCESS, 'Your booking was sucessful!')
+                        request, messages.SUCCESS,
+                        'Your booking was sucessful!')
                     return redirect('booking', booking.id)
                 else:
                     messages.add_message(
@@ -203,8 +230,8 @@ class EditForm(View):
                     )
             else:
                 messages.add_message(
-                        request, messages.ERROR,
-                        'Error in party size (0-4) or booking time (see opening hours)')
+                    request, messages.ERROR,
+                    'Error in party size (0-4) or booking time (see opening hours)')
                 return render(
                         request,
                         'form.html', {

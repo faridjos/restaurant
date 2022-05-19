@@ -17,6 +17,8 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
     </script>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- To find the background image the static file has to load which was impossible in the CSS file -->
     <style>
         #sea-food-image {
             height: 500px;
@@ -29,16 +31,17 @@
 
 <body>
 
-    <!-- Navigation -->
+    <!-- Navigation from Bootstrap 5 -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand"><img src="{% static 'images/logo-restaurant.png' %}" alt="logo"></span></a>
+            <a class="navbar-brand" href="{% url 'home' %}"><span class="brand"><img
+                        src="{% static 'images/logo-restaurant.png' %}" alt="logo"></span></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarText">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">                    
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -70,6 +73,7 @@
         </div>
     </nav>
 
+    <!-- enable messaging. Copied from Code Institute Codestar Django3blog -->
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-md-2">
@@ -84,6 +88,7 @@
         </div>
     </div>
 
+    <!-- The page has three columns for medium devices and wider instead of two in the base template -->
     <section class="row no-gutters">
         <div class="col-sm-6 col-lg-4 contact">
             <h3>Contact Us</h3>
@@ -100,7 +105,7 @@
                 searestaurant@mail.com</p>
         </div>
         <div class="col-sm-6 col-lg-4" id="sea-food-image">
-            
+
         </div>
         <div class="col-sm-6 col-lg-4">
             <div id="map"></div>
@@ -123,9 +128,17 @@
             <p>searestaurant@mail.com</p>
         </div>
     </footer>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOaIDB5ww5nfTkth_GBztb49XX_Xq8wTc&callback=initMap"></script>
+
+    <!-- JavaScript for map copied from Code Institute InteractiveFrontEndDevelopment-Resume -->
+    <script
+        src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCOaIDB5ww5nfTkth_GBztb49XX_Xq8wTc&callback=initMap">
+    </script>
     <script src="{% static 'js/maps.js' %}"></script>
+
+    <!-- enable erasing message after 3s. Copied from Code Institute Codestar Django3blog -->
     <script>
         setTimeout(function () {
             let messages = document.getElementById("msg");
