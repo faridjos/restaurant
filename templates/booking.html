@@ -4,7 +4,7 @@
 
 <section class="row no-gutters main-image">
     <div class="col-sm-8">
-        <div class="card text-dark bg-info" id="card-center">
+        <div class="card text-dark bg-light border-success mt-5" id="card-center">
             <div class="card-body">
                 <h5 class="card-title">Your booking</h5>
                 <table class="table table-borderless">
@@ -28,10 +28,14 @@
                     </tbody>
                 </table>
                 {% if user.is_authenticated %}
-                <p>
-                    <a href="{% url 'delete' booking_id=booking.id %}" class="btn red">Delete</a>
-                    <a href="{% url 'edit' booking_id=booking.id %}" class="btn green">Edit</a>
-                </p>
+                <div class="container">
+                <div class="row no-gutters">
+                    <div class="col-8 offset-2">
+                        <a href="{% url 'delete' booking_id=booking.id %}" class="btn btn-danger">Delete</a>
+                        <a href="{% url 'edit' booking_id=booking.id %}" class="btn btn-success">Edit</a>
+                    </div>
+                </div>
+            </div>
                 {% endif %}
             </div>
         </div>

@@ -104,8 +104,8 @@ class Form(View):
 class ShowBooking(View):
     def get(self, request, booking_id):
         booking = get_object_or_404(Booking, id=booking_id)
-        booking_time = booking.booking_time.strftime("%d/%m/%Y %H:%M %Z")
-        time_of_booking = booking.time_of_booking.strftime("%d/%m/%Y %H:%M %Z")
+        booking_time = booking.booking_time.astimezone().strftime("%d/%m/%Y %H:%M")
+        time_of_booking = booking.time_of_booking.astimezone().strftime("%d/%m/%Y %H:%M")
         return render(
             request,
             'booking.html',
@@ -123,9 +123,8 @@ class BookingButton(View):
             customer = get_object_or_404(Customer, username=request.user.username)
             if customer.bookings.exists():
                 booking = customer.bookings.all()[0]
-                dt = datetime.now()
-                dt_aware = timezone.make_aware(dt, timezone.get_current_timezone())
-                if booking.booking_time >= dt_aware:
+                dt = datetime.now().astimezone()
+                if booking.booking_time >= dt:
                     return redirect('booking', booking.id)
                 else: 
                     return redirect('home')
