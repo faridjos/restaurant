@@ -25,7 +25,7 @@
     <!-- The pseudoelement is to make only the background transparent -->
     <style>
         .main-image {
-            height: 600px;
+            height: 700px;
             position: relative;
         }
 
@@ -64,7 +64,7 @@
                         <a class="nav-link" href="{% url 'contact' %}"><strong>CONTACT</strong></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% static 'images/colorful-seafood-sign.jpg' %}"
+                        <a class="nav-link" href="{% static 'images/seafood-menu.jpg' %}"
                             target="_blank"><strong>MENU</strong></a>
                     </li>
                     <li class="nav-item">
@@ -106,12 +106,21 @@
     <section class="row no-gutters main-image">
 
         <!-- Render the form -->
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-sm-6 col-lg-4">            
             <form method="post" id="form-center">
-                {{ booking_form | crispy }}
-                {{ customer_form | crispy }}
-                {% csrf_token %}
-                <button type="submit" class="btn btn-secondary">Submit</button>
+                <div class="row">
+                    <div class="col">
+                        <h6>Fill out the booking form. The party size is max 4.<br></h6>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        {{ booking_form | crispy }}
+                        {{ customer_form | crispy }}
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                    </div>
+                </div>
             </form>
         </div>
 
